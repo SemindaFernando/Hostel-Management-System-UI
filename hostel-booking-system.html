@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Booking System</title>
+    <link rel="stylesheet" href="hostel.css">
+
+
+    <style>
+        
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <ul> 
+            <li><a href="#" data-page="home">Home</a></li>
+            <li><a href="#" data-page="dashboard">Dashboard</a></li>
+            <li><a href="#" data-page="rooms">Rooms</a></li>
+            <li><a href="#" data-page="booking">Booking</a></li>
+            <li><a href="#" data-page="payment">Payment</a></li>
+            <li><a href="#" data-page="complaints">Complaints</a></li>
+            <li><a href="#" data-page="login">Login</a></li>
+
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Login Page -->
+        <div id="login" class="page active">
+            <div class="login-container">
+                <div class="login-header">
+                    <h2>Welcome Back</h2>
+                    <p>Please enter your details to continue</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <div class="options">
+                        <label>
+                            <input type="checkbox" id="remember"> Remember me
+                        </label>
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+                    
+                    <p style="text-align: center; margin-top: 20px;">
+                        Don't have an account? <a href="#">Sign up for free!</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Home Page -->
+        <div id="home" class="page">
+            <div style="text-align: center;">
+                <h1 style="font-size: 3.5em; color: #333; margin-bottom: 20px;">Hostel Booking System</h1>
+                <p style="font-size: 1.2em; color: #666; margin-bottom: 40px;">Comfortable accommodation for students</p>
+            </div>
+            
+            <h2 style="text-align: center; margin: 40px 0;">Pricing Table</h2>
+            <div class="pricing-table">
+                <div class="pricing-card">
+                    <h3>2 Sharing Room</h3>
+                    <div style="margin: 20px 0;">
+                        <div class="price-tag">800/= per day</div>
+                        <div class="price-tag">2000/= per week</div>
+                        <div class="price-tag">9000/= per month</div>
+                    </div>
+                </div>
+                <div class="pricing-card">
+                    <h3>4 Sharing Room</h3>
+                    <div style="margin: 20px 0;">
+                        <div class="price-tag">750/= per day</div>
+                        <div class="price-tag">1950/= per week</div>
+                        <div class="price-tag">7500/= per month</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="background: #fff3cd; border: 1px solid #ffeaa7;">
+                <h4 style="color: #856404;">Important Notice</h4>
+                <ul style="margin: 15px 0; padding-left: 20px; color: #856404;">
+                    <li>A week is calculated by 7 days, a month by 30 days</li>
+                    <li>Days are calculated by nights, not days</li>
+                    <li>You should move out in the morning of checkout date</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn" onclick="showPage('rooms')">Check Room Availability</button>
+                <button class="btn" onclick="showPage('booking')">Book Now</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <h1>Dashboard</h1>
+            <h3>Welcome, Student!</h3>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Students</h4>
+                    <div class="stat-number">267</div>
+                    <p>Currently residing</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Available Rooms</h4>
+                    <div class="stat-number">47</div>
+                    <p>Ready for booking</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Your Booking</h4>
+                    <div class="stat-number" id="userBookingStatus">-</div>
+                    <p>Current status</p>
+                </div>
+            </div>
+            
+            <div class="card" id="bookingDetails" style="display: none;">
+                <h3>Your Current Booking</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div><strong>Room Number:</strong> <span id="roomNumber">-</span></div>
+                    <div><strong>Check-in:</strong> <span id="checkinDate">-</span></div>
+                    <div><strong>Check-out:</strong> <span id="checkoutDate">-</span></div>
+                    <div><strong>Room Type:</strong> <span id="roomType">-</span></div>
+                </div>
+                <button class="btn btn-danger" onclick="cancelBooking()">Cancel Booking</button>
+            </div>
+        </div>
+
+        <!-- Rooms Page -->
+        <div id="rooms" class="page">
+            <h1>Room Availability</h1>
+            
+            <div class="card">
+                <h3>Check Availability</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="checkinDate">Check-in Date</label>
+                        <input type="date" id="checkinDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkoutDate">Check-out Date</label>
+                        <input type="date" id="checkoutDate" required>
+                    </div>
+                </div>
+                <button class="btn" onclick="checkAvailability()">Check Availability</button>
+            </div>
+            
+            <div class="room-grid" id="roomList">
+                <div class="room-card">
+                    <div class="room-header">
+                        <h3>Room G1</h3>
+                        <p>Ground Floor - Boys</p>
+                    </div>
+                    <div class="room-content">
+                        <p><strong>Capacity:</strong> 2 Sharing</p>
+                        <p><strong>Price:</strong> 800/= per day</p>
+                        <p><strong>Amenities:</strong> WiFi, AC, Study Table</p>
+                        <button class="btn" onclick="selectRoom('G1', '2 Sharing', 800)">Select Room</button>
+                    </div>
+                </div>
+                
+                <div class="room-card">
+                    <div class="room-header">
+                        <h3>Room G2</h3>
+                        <p>Ground Floor - Boys</p>
+                    </div>
+                    <div class="room-content">
+                        <p><strong>Capacity:</strong> 4 Sharing</p>
+                        <p><strong>Price:</strong> 750/= per day</p>
+                        <p><strong>Amenities:</strong> WiFi, AC, Study Table</p>
+                        <button class="btn" onclick="selectRoom('G2', '4 Sharing', 750)">Select Room</button>
+                    </div>
+                </div>
+                
+                <div class="room-card">
+                    <div class="room-header">
+                        <h3>Room G3</h3>
+                        <p>Ground Floor - Girls</p>
+                    </div>
+                    <div class="room-content">
+                        <p><strong>Capacity:</strong> 2 Sharing</p>
+                        <p><strong>Price:</strong> 800/= per day</p>
+                        <p><strong>Amenities:</strong> WiFi, AC, Study Table</p>
+                        <button class="btn" onclick="selectRoom('G3', '2 Sharing', 800)">Select Room</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Page -->
+        <div id="booking" class="page">
+            <h1>Booking Details</h1>
+            
+            <form id="bookingForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingEmail">Email</label>
+                        <input type="email" id="bookingEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone">Telephone</label>
+                        <input type="tel" id="telephone" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingCheckin">Check-in Date</label>
+                        <input type="date" id="bookingCheckin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingCheckout">Check-out Date</label>
+                        <input type="date" id="bookingCheckout" required>
+                    </div>
+                </div>
+                
+                <div class="card" id="reservationDetails">
+                    <h3>Reservation Details</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 20px 0;">
+                        <div class="card"><strong>Room:</strong> <span id="selectedRoom">Not selected</span></div>
+                        <div class="card"><strong>Type:</strong> <span id="selectedType">-</span></div>
+                        <div class="card"><strong>Price:</strong> <span id="selectedPrice">-</span></div>
+                        <div class="card"><strong>Total:</strong> <span id="totalPrice">-</span></div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="button" class="btn btn-danger" onclick="cancelBookingForm()">Cancel</button>
+                    <button type="submit" class="btn">Proceed to Payment</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Payment Page -->
+        <div id="payment" class="page">
+            <h1>Payment Details</h1>
+            
+            <div class="card">
+                <h3>Transaction Summary</h3>
+                <p><strong>Date:</strong> <span id="paymentDate"></span></p>
+                <div class="price-tag" style="font-size: 1.5em; margin: 20px 0;">
+                    LKR. <span id="paymentAmount">0</span>/=
+                </div>
+            </div>
+            
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" id="cardName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" maxlength="3" placeholder="123" required>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="button" class="btn btn-danger" onclick="showPage('booking')">Back</button>
+                    <button type="submit" class="btn">Complete Payment</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Complaints Page -->
+        <div id="complaints" class="page">
+            <h1>Submit a Complaint</h1>
+            
+            <form id="complaintsForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="complaintName">Name</label>
+                        <input type="text" id="complaintName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="complaintEmail">Email</label>
+                        <input type="email" id="complaintEmail" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regNumber">Registration Number</label>
+                        <input type="text" id="regNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="complaintRoom">Room Number</label>
+                        <input type="text" id="complaintRoom">
+                    </div>
+                    <div class="form-group">
+                        <label for="complaintType">Complaint Type</label>
+                        <select id="complaintType" required>
+                            <option value="">Select type</option>
+                            <option value="booking">Booking Issue</option>
+                            <option value="payment">Payment Issue</option>
+                            <option value="facility">Facility Issue</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="complaintDescription">Description</label>
+                    <textarea id="complaintDescription" rows="5" placeholder="Please describe your complaint in detail..." required></textarea>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn">Submit Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="message" class="message"></div>
+
+    <script>
+        // Global state
+        let currentUser = null;
+        let selectedRoomData = null;
+        let currentBooking = null;
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navbar
+            document.querySelectorAll('.navbar a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+        }
+
+        // Message system
+        function showMessage(text, type = 'success') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                messageDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        // Navigation event listeners
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = e.target.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                currentUser = {
+                    email: email,
+                    name: email.split('@')[0]
+                };
+                
+                showMessage('Login successful! Welcome back.', 'success');
+                showPage('home');
+                updateDashboard();
+            } else {
+                showMessage('Please enter valid credentials.', 'error');
+            }
+        });
+
+        // Room selection
+        function selectRoom(roomId, type, price) {
+            selectedRoomData = {
+                room: roomId,
+                type: type,
+                price: price
+            };
+            
+            // Update booking form
+            document.getElementById('selectedRoom').textContent = roomId;
+            document.getElementById('selectedType').textContent = type;
+            document.getElementById('selectedPrice').textContent = price + '/= per day';
+            
+            showMessage(`Room ${roomId} selected successfully!`, 'success');
+            showPage('booking');
+        }
+
+        // Check availability
+        function checkAvailability() {
+            const checkin = document.getElementById('checkinDate').value;
+            const checkout = document.getElementById('checkoutDate').value;
+            
+            if (!checkin || !checkout) {
+                showMessage('Please select both check-in and check-out dates.', 'error');
+                return;
+            }
+            
+            if (new Date(checkin) >= new Date(checkout)) {
+                showMessage('Check-out date must be after check-in date.', 'error');
+                return;
+            }
+            
+            showMessage('Room availability checked! Select your preferred room.', 'success');
+        }
+
+        // Calculate total price
+        function calculateTotal() {
+            if (!selectedRoomData) return;
+            
+            const checkin = document.getElementById('bookingCheckin').value;
+            const checkout = document.getElementById('bookingCheckout').value;
+            
+            if (checkin && checkout) {
+                const days = Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24));
+                const total = days * selectedRoomData.price;
+                document.getElementById('totalPrice').textContent = total + '/=';
+                return total;
+            }
+            return 0;
+        }
+
+        // Date change listeners
+        document.getElementById('bookingCheckin').addEventListener('change', calculateTotal);
+        document.getElementById('bookingCheckout').addEventListener('change', calculateTotal);
+
+        // Booking form
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!selectedRoomData) {
+                showMessage('Please select a room first.', 'error');
+                showPage('rooms');
+                return;
+            }
+            
+            const total = calculateTotal();
+            if (total <= 0) {
+                showMessage('Please select valid dates.', 'error');
+                return;
+            }
+            
+            // Store booking data
+            currentBooking = {
+                room: selectedRoomData.room,
+                type: selectedRoomData.type,
+                checkin: document.getElementById('bookingCheckin').value,
+                checkout: document.getElementById('bookingCheckout').value,
+                total: total,
+                guest: {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('bookingEmail').value,
+                    phone: document.getElementById('telephone').value,
+                    address: document.getElementById('address').value
+                }
+            };
+            
+            // Update payment page
+            document.getElementById('paymentDate').textContent = new Date().toLocaleDateString();
+            document.getElementById('paymentAmount').textContent = total;
+            
+            showPage('payment');
+        });
+
+        // Card number formatting
+        document.getElementById('cardNumber').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            if (formattedValue.length <= 19) {
+                e.target.value = formattedValue;
+            }
+        });
+
+        // Expiry date formatting
+        document.getElementById('expiryDate').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // CVV formatting
+        document.getElementById('cvv').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '').substring(0, 3);
+        });
+
+        // Payment form
+        document.getElementById('paymentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const cardName = document.getElementById('cardName').value.trim();
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const expiryDate = document.getElementById('expiryDate').value;
+            const cvv = document.getElementById('cvv').value;
+            
+            // Validation
+            if (!cardName || !cardNumber || !expiryDate || !cvv) {
+                showMessage('Please fill in all payment details.', 'error');
+                return;
+            }
+            
+            if (cardNumber.length !== 16) {
+                showMessage('Please enter a valid 16-digit card number.', 'error');
+                return;
+            }
+            
+            if (expiryDate.length !== 5 || !expiryDate.includes('/')) {
+                showMessage('Please enter a valid expiry date (MM/YY).', 'error');
+                return;
+            }
+            
+            if (cvv.length !== 3) {
+                showMessage('Please enter a valid 3-digit CVV.', 'error');
+                return;
+            }
+            
+            // Simulate payment processing
+            showMessage('Processing payment...', 'success');
+            
+            setTimeout(() => {
+                showMessage('Payment successful! Your booking is confirmed.', 'success');
+                updateDashboard();
+                showPage('dashboard');
+                
+                // Reset forms
+                document.getElementById('bookingForm').reset();
+                document.getElementById('paymentForm').reset();
+                selectedRoomData = null;
+            }, 2000);
+        });
+
+        // Complaints form
+        document.getElementById('complaintsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('complaintName').value.trim();
+            const email = document.getElementById('complaintEmail').value.trim();
+            const regNumber = document.getElementById('regNumber').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const type = document.getElementById('complaintType').value;
+            const description = document.getElementById('complaintDescription').value.trim();
+            
+            if (!name || !email || !regNumber || !phone || !type || !description) {
+                showMessage('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+            
+            // Phone validation
+            const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+            if (!phoneRegex.test(phone)) {
+                showMessage('Please enter a valid phone number.', 'error');
+                return;
+            }
+            
+            showMessage('Your complaint has been submitted successfully! We will contact you soon.', 'success');
+            document.getElementById('complaintsForm').reset();
+        });
+
+        // Update dashboard
+        function updateDashboard() {
+            if (currentBooking) {
+                document.getElementById('userBookingStatus').textContent = 'Active';
+                document.getElementById('roomNumber').textContent = currentBooking.room;
+                document.getElementById('checkinDate').textContent = currentBooking.checkin;
+                document.getElementById('checkoutDate').textContent = currentBooking.checkout;
+                document.getElementById('roomType').textContent = currentBooking.type;
+                document.getElementById('bookingDetails').style.display = 'block';
+            } else {
+                document.getElementById('userBookingStatus').textContent = 'None';
+                document.getElementById('bookingDetails').style.display = 'none';
+            }
+        }
+
+        // Cancel booking
+        function cancelBooking() {
+            if (confirm('Are you sure you want to cancel your booking? This action cannot be undone.')) {
+                currentBooking = null;
+                updateDashboard();
+                showMessage('Booking cancelled successfully.', 'success');
+            }
+        }
+
+        // Cancel booking form
+        function cancelBookingForm() {
+            if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+                document.getElementById('bookingForm').reset();
+                selectedRoomData = null;
+                document.getElementById('selectedRoom').textContent = 'Not selected';
+                document.getElementById('selectedType').textContent = '-';
+                document.getElementById('selectedPrice').textContent = '-';
+                document.getElementById('totalPrice').textContent = '-';
+                showPage('home');
+            }
+        }
+
+        // Set minimum date to today for all date inputs
+        function setMinDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkinDate').min = today;
+            document.getElementById('checkoutDate').min = today;
+            document.getElementById('bookingCheckin').min = today;
+            document.getElementById('bookingCheckout').min = today;
+        }
+
+        // Validate checkout date is after checkin
+        document.getElementById('checkinDate').addEventListener('change', (e) => {
+            document.getElementById('checkoutDate').min = e.target.value;
+        });
+
+        document.getElementById('bookingCheckin').addEventListener('change', (e) => {
+            document.getElementById('bookingCheckout').min = e.target.value;
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setMinDates();
+            showPage('login');
+        });
+
+        // Auto-populate booking form if user is logged in
+        document.getElementById('bookingEmail').addEventListener('focus', (e) => {
+            if (currentUser && !e.target.value) {
+                e.target.value = currentUser.email;
+            }
+        });
+
+        // Real-time form validation feedback
+        function addValidationFeedback() {
+            const inputs = document.querySelectorAll('input[required], textarea[required], select[required]');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', (e) => {
+                    if (e.target.value.trim() === '') {
+                        e.target.style.borderColor = '#ff6b6b';
+                    } else {
+                        e.target.style.borderColor = '#28a745';
+                    }
+                });
+                
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.trim() !== '') {
+                        e.target.style.borderColor = '#28a745';
+                    }
+                });
+            });
+        }
+
+        // Phone number formatting
+        document.getElementById('telephone').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            e.target.value = value;
+        });
+
+        document.getElementById('phone').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            e.target.value = value;
+        });
+
+        // Initialize validation feedback
+        addValidationFeedback();
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault();
+                        showPage('login');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        showPage('home');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        showPage('dashboard');
+                        break;
+                    case '4':
+                        e.preventDefault();
+                        showPage('rooms');
+                        break;
+                }
+            }
+        });
+
+        // Session simulation
+        function saveSession() {
+            const sessionData = {
+                currentUser,
+                currentBooking,
+                selectedRoomData
+            };
+            // In a real application, this would be saved to localStorage or server
+            console.log('Session saved:', sessionData);
+        }
+
+        // Save session on page unload
+        window.addEventListener('beforeunload', saveSession);
+
+        // Loading animation for forms
+        function showLoading(formId) {
+            const form = document.getElementById(formId);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Processing...';
+            submitBtn.disabled = true;
+            
+            return () => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            };
+        }
+
+        console.log('Hostel Booking System initialized successfully!');
+    </script>
+</body>
+</html>
